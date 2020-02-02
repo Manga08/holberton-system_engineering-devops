@@ -1,0 +1,2 @@
+#!/bin/bash
+print . -name ".gif" -type f -printf "%f\n" | LC_ALL=C sort | rev | cut -d "." -f 2,3 | rev |
