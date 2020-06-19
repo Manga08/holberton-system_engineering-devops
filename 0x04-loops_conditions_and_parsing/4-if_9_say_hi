@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# This script displays with until "Holberton School" 10 times, but in the 9 times say hi
+i=0
+while [ $((i++)) -lt 10 ]; do
+    echo Holberton School
+    if [ $i -eq 9 ]; then
+	echo Hi
+    fi
+done
