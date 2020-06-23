@@ -3,6 +3,7 @@
 #include <unistd.h>
 /**
  * infinite_while - Creates an infinite loop to make the program infinite.
+ * Return: Nothing
  */
 int infinite_while(void)
 {
@@ -13,6 +14,7 @@ int infinite_while(void)
 }
 /**
  * main - Creates zombie(zmb) processes.
+ * Return: Always 0.
  */
 int main(void)
 {
