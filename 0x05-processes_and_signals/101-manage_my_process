@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Write Bash (init) script 101-manage_my_process that manages manage_my_process.
+
+fl=/var/run/my_process.pid
+
+stop_process() {
+    pkill -SIGKILL -f ./manage_my_process
+    rm "$fl"
+}
+
+start_process() {
+    ./manage_my_process &
+    echo "$!" > "$fl"
+}
+
+
+case "${1:-''}" in
+    'start')
+	start_process
+	echo manage_my_process started
+	;;
+
+    'stop')
+	stop_process
+	echo manage_my_process stopped
+	;;
+
+    'restart')
+	stop_process
+	start_process
+	echo manage_my_process restarted
+	;;
+
+    *)
+	echo "Usage: manage_my_process {start|stop|restart}"
+	exit 1
+	;;
+esac
+
+exit 0
