@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Install and configure HAproxy on your lb-01 server
-apt-get -y install software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-1.5
-apt-get -y update
-apt-get -y install haproxy=1.5.\*
-echo "backend web-backend
+sudo apt-get -y install software-properties-common
+sudo add-apt-repository -y ppa:vbernat/haproxy-1.5
+sudo apt-get -y update
+sudo apt-get -y install haproxy=1.5.\*
+sudo echo "backend web-backend
 balance roundrobin
 server 1454-web-01 34.75.211.47:80 check
 server 1454-web-02 35.196.119.148:80 check
@@ -13,3 +13,4 @@ bind *:80
 mode http
 default_backend web-backend
 " >> /etc/haproxy/haproxy.cfg
+sudo service haproxy restart
