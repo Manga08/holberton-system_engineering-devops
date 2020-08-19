@@ -10,7 +10,6 @@ custom_fn ()
 }
 
 domain="$1"
-# sbdmain="$2"
 if [ $# -eq 1 ]; then
     custom_fn www lb-01 web-01 web-02
 else
