@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #Display information about subdomains.
-information ()
+custom_fn ()
 {
     for arg
     do
@@ -12,8 +12,8 @@ information ()
 domain="$1"
 # sbdmain="$2"
 if [ $# -eq 1 ]; then
-    information www lb-01 web-01 web-02
+    custom_fn www lb-01 web-01 web-02
 else
     sbdmain="$2"
-    information "$sbdmain"
+    custom_fn "$sbdmain"
 fi
