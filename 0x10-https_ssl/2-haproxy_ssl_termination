@@ -1,5 +1,6 @@
 global
         maxconn 2048
+        tune.ssl.default-dh-param 2048
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
@@ -12,16 +13,10 @@ global
         # Default SSL material locations
         ca-base /etc/ssl/certs
         crt-base /etc/ssl/private
-
-        # Default ciphers to use on SSL-enabled listening sockets.
-        # For more information, see ciphers(1SSL). This list is from:
-        #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
         ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
         ssl-default-bind-options no-sslv3
 
 defaults
-        option forwardfor
-        option http-server-close
         log     global
         mode    http
         option  httplog
@@ -36,12 +31,18 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
-frontend www-http
+frontend http
         bind *:80
-        bind *:443 ssl crt /etc/haproxy/ssl/www.mangacero.tech.pem
-        default_backend web-backend
-backend web-backend
-        mode http
+        reqadd X-Forwarded-Proto:\ http
+        default_backend wserver
+
+frontend https
+        bind *:443 ssl crt /etc/haproxy/certs/www.mangacero.tech.pem
+        reqadd X-Forwarded-Proto:\ https
+        default_backend wserver
+
+backend wserver
         balance roundrobin
+        redirect scheme https code 301 if !{ ssl_fc }
         server 1454-web-01 34.75.211.47:80 check
         server 1454-web-02 35.196.119.148:80 check
