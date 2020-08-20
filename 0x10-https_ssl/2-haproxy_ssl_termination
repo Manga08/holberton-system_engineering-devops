@@ -36,18 +36,10 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
-listen 1454-lb-01
-        bind *:80
-        mode http
-        stats enable
-        balance roundrobin
-        server 1454-web-01 34.75.211.47:80 check
-        server 1454-web-02 35.196.119.148:80 check
 frontend www-http
         bind *:80
         bind *:443 ssl crt /etc/haproxy/ssl/www.mangacero.tech.pem
         default_backend web-backend
-
 backend web-backend
         mode http
         balance roundrobin
