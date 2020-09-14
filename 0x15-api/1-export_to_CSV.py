@@ -1,25 +1,22 @@
 #!/usr/bin/python3
 """Using a REST API, for a given employee ID, export data in the CSV format."""
-import csv
-import requests
-import sys
 
-if __name__ == "__main__":
-    employee = sys.argv[1]
-    URL = 'https://jsonplaceholder.typicode.com/'
-    URL_User = URL + 'users/' + employee
-    resp = requests.get(URL_User)
-    Name = resp.json().get('username')
-    URL_User = URL + 'todos'
-    resp = requests.get(URL_User)
+if __name__ == '__main__':
+    import requests
+    import csv
+    from sys import argv
 
-    info = [data for data in resp.json()
-            if data.get('userId') is int(employee)]
+    resp = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+                        format(argv[1]))
+    user = resp.json().get('username')
 
-    with open('{}.csv'.format(sys.argv[1]), 'w') as f:
-        fields = ["name", "userId", "title", "completed"]
-        writer = csv.DictWriter(f, fieldnames=fields, quoting=csv.QUOTE_ALL)
-        for element in info:
-            element['name'] = Name
-            del element['id']
-            writer.writerow(element)
+    resp = requests.get('https://jsonplaceholder.typicode.com/todos?userId={}'.
+                        format(argv[1]))
+    data = resp.json()
+
+    with open('{}.csv'.format(argv[1]), mode='w') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"',
+                            quoting=csv.QUOTE_ALL)
+        for task in data:
+            writer.writerow([argv[1], user, task.get('completed'),
+                             task.get('title')])
