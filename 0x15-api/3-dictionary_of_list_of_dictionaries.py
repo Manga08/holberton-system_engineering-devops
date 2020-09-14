@@ -16,7 +16,7 @@ if __name__ == '__main__':
     for user in all_id:
         resp = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
                             format(user))
-        user = resp.json().get('username')
+        username = resp.json().get('username')
 
         resp = requests.get('https://jsonplaceholder.typicode.com/' +
                             'todos?userId={}'.format(user))
@@ -27,7 +27,7 @@ if __name__ == '__main__':
             export['{}'.format(user)].append({
                 'task': task.get('title'),
                 'completed': task.get('completed'),
-                'username': user
+                'username': username
             })
 
     with open('todo_all_employees.json', 'w') as f:
