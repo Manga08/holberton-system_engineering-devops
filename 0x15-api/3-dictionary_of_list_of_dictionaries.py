@@ -15,13 +15,13 @@ if __name__ == "__main__":
         resp = requests.get(URL)
         employee = current_user.get('id')
         data = [info for info in resp.json()
-                 if info.get('userId') is int(employee)]
+                if info.get('userId') is int(employee)]
         list = []
         for info in data:
             new_dicty = {"username": current_user['username'],
-                        "task": info['title'],
-                        "completed": info['completed'],
-                        }
+                         "task": info['title'],
+                         "completed": info['completed'],
+                         }
             list.append(new_dicty)
         users_dicty[current_user.get('id')] = list
 
