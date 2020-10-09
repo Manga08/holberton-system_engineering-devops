@@ -1,0 +1,59 @@
+server {
+       listen 80 default_server;
+       listen [::]:80 default_server;
+
+       server_name _;
+
+       root /var/www/html;
+              # Add index.php to the list if you are using PHP
+             index index.html index.htm index.nginx-debian.html;
+
+       location / {
+                try_files $uri $uri/ =404;
+                add_header X-Served-By $HOSTNAME;
+        }
+        error_page 404 /404.html;
+
+       location /redirect_me {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                return 301 https://twitter.com/home;
+        }
+
+       location /hbnb_static/ {
+                alias /data/web_static/current/;
+                autoindex off;
+        }
+
+       location /airbnb-onepage {
+                proxy_pass http://0.0.0.0:5000/airbnb-onepage;
+       }
+
+       location ~^/airbnb-dynamic/number_odd_or_even/([0-9]+)$ {
+                proxy_pass http://0.0.0.0:5001/number_odd_or_even/$1;
+        }
+        location /api/ {
+               proxy_pass http://0.0.0.0:5002/api/;
+        }
+
+}
+
+
+# Virtual Host configuration for example.com
+#
+# You can move that to a different file under sites-available/ and symlink that
+# to sites-enabled/ to enable it.
+#
+#server {
+#       listen 80;
+#       listen [::]:80;
+#
+#       server_name example.com;
+#
+#       root /var/www/example.com;
+#       index index.html;
+#
+#       location /redirect_me {
+#                 return 301 https://twitter.com/home;
+#                         }
+#}
